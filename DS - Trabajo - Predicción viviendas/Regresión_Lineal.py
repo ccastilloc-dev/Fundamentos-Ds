@@ -7,12 +7,12 @@ import seaborn as sns
 import matplotlib.pyplot as plt
 from Limpieza_Datos import df_limpio
 
-X = df_limpio[['Dorms', 'Baths', 'Built Area', 'Total Area', 'Parking']] # Variables independientes
-Y = df_limpio['Price_UF'] # Variable dependiente
+X = df_limpio[['Dorms', 'Baths', 'Built Area', 'Total Area', 'Parking']] 
+Y = df_limpio['Price_UF'] 
 
-X_train, X_test, Y_train, Y_test = train_test_split(X, Y, test_size=0.2, random_state=42) # División de datos en entrenamiento y prueba, 80% - 20%
-predictor_prices = LinearRegression() # Crear el modelo de regresión lineal
-predictor_prices.fit(X_train, Y_train) # Entrenar el modelo con los datos de entrenamiento
+X_train, X_test, Y_train, Y_test = train_test_split(X, Y, test_size=0.2, random_state=42)
+predictor_prices = LinearRegression()
+predictor_prices.fit(X_train, Y_train) 
 
 mae = mean_absolute_error(Y_test, predictor_prices.predict(X_test)) # Calcular el error absoluto medio en los datos de prueba
 r2 = r2_score(Y_test, predictor_prices.predict(X_test)) # Calcular el coeficiente de determinación R^2
@@ -26,3 +26,4 @@ plt.xlabel('Precio Real')
 plt.ylabel('Precio Predicho')
 plt.title('Comparación de Precios Reales vs Predichos')
 plt.show()
+
