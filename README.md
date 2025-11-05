@@ -1,4 +1,4 @@
 # Fundamentos-Ds
 integrantes : Cristopher Castillo
-            , Cristopher Perez
+            , Cristobal Perez
             , Bastian Gonzales
