@@ -1,17 +1,15 @@
-
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import mean_absolute_error, r2_score
-from tensorflow.keras.models import Sequential, load_model
-from tensorflow.keras.layers import Dense, Dropout
-from tensorflow.keras.optimizers import Adam
-from tensorflow.keras.callbacks import EarlyStopping
-from tensorflow.keras.regularizers import l2
+from keras.models import Sequential, load_model
+from keras.layers import Dense, Dropout
+from keras.optimizers import Adam
+from keras.callbacks import EarlyStopping
+from keras.regularizers import l2
 from sklearn.preprocessing import StandardScaler
-
 from Limpieza_Datos import df_limpio  #Usa el DataFrame limpio
 
 df_limpio['Price_per_m2'] = df_limpio['Price_UF'] / (df_limpio['Built Area'].replace(0, np.nan))
@@ -49,7 +47,7 @@ model.compile(optimizer=Adam(learning_rate=0.0005), loss='mse')
 
 early_stop = EarlyStopping(monitor='val_loss', patience=30, restore_best_weights=True)
 history = model.fit(X_train_scaled, y_train, validation_split=0.2,
-                    epochs=500, batch_size=32, verbose=1,
+                    epochs=200, batch_size=32, verbose=1,
                     callbacks=[early_stop])
 
 predictions_log = model.predict(X_test_scaled).flatten()
@@ -93,14 +91,12 @@ plt.legend()
 plt.grid(True)
 plt.show()
 
-model.save('modelo_red_neuronal_final.h5')
-print("Modelo guardado como 'modelo_red_neuronal_final.h5'")
+model.save('modelo_red_neuronal_final.keras')
+print("Modelo guardado como 'modelo_red_neuronal_final.keras'")
 
 def load_and_predict(model_path, data_dict):
     loaded_model = load_model(model_path)
     new_df = pd.DataFrame([data_dict])
-    new_df['Price_per_m2'] = new_df['Built Area'] / (new_df['Built Area'].replace(0, np.nan))
-    new_df['Baths_per_Dorm'] = new_df['Baths'] / (new_df['Dorms'].replace(0, np.nan))
     new_df = pd.get_dummies(new_df, columns=['Comuna'])
     new_df = new_df.reindex(columns=X.columns, fill_value=0)
     new_scaled = scaler.transform(new_df)
@@ -115,4 +111,5 @@ nuevo_dato = {
     'Total Area': 200,
     'Comuna': 'Santiago'
 }
-print(f"Predicción con modelo cargado: {load_and_predict('modelo_red_neuronal_final.h5', nuevo_dato):.2f} UF")
+print(f"Predicción con modelo cargado: {load_and_predict('modelo_red_neuronal_final.keras', nuevo_dato):.2f} UF")
+
